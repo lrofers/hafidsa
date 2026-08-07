@@ -116,14 +116,18 @@ app.put('/api/portfolio', requireAuth, async (req, res) => {
   const validationError = validatePortfolioPayload(req.body);
   if (validationError) return res.status(400).json({ error: validationError });
 
+  const payloadStr = JSON.stringify(req.body);
+  console.log(`PUT /api/portfolio payload size: ${payloadStr.length} bytes (${(payloadStr.length / 1024).toFixed(1)} KB)`);
+
   try {
     const jbRes = await fetch(JSONBIN_URL, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'X-Master-Key': JSONBIN_API_KEY,
+        'X-Bin-Versioning': 'false', // don't keep version history — avoids piling up storage
       },
-      body: JSON.stringify(req.body),
+      body: payloadStr,
     });
     if (!jbRes.ok) {
       const errBody = await jbRes.text().catch(() => '');
