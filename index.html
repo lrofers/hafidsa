@@ -401,7 +401,7 @@ const FALLBACK = {
     {name:"English", level:60}
   ],
   contact: {
-    instagram:"", tiktok:"", youtube:"", pinterest:""
+    whatsapp:"085349391484", instagram:"lrofers", tiktok:"lrofers"
   },
   projects: [
     {title:"Project 1", imageUrl:"https://placehold.co/400x300/111c2c/5c7086?text=Project", big:true},
@@ -459,18 +459,17 @@ function render(data){
 
   const links = document.getElementById('contact-links');
   links.innerHTML='';
-  const platforms = [
-    {key:'instagram', label:'IG', name:'Instagram'},
-    {key:'tiktok', label:'TT', name:'TikTok'},
-    {key:'youtube', label:'YT', name:'YouTube'},
-    {key:'pinterest', label:'PT', name:'Pinterest'}
-  ];
-  platforms.forEach(p=>{
-    const val = data.contact && data.contact[p.key];
-    if(!val) return;
-    const href = val.startsWith('http') ? val : `https://${p.key}.com/${val.replace('@','')}`;
-    links.innerHTML += `<a href="${href}" target="_blank" rel="noopener"><span class="plat">${p.label}</span> ${val}</a>`;
-  });
+  const contact = data.contact || {};
+  if(contact.whatsapp){
+    const digits = contact.whatsapp.replace(/[^0-9]/g,'').replace(/^0/,'62');
+    links.innerHTML += `<a href="https://wa.me/${digits}" target="_blank" rel="noopener"><span class="plat">WA</span> ${contact.whatsapp}</a>`;
+  }
+  if(contact.instagram){
+    links.innerHTML += `<a href="https://instagram.com/${contact.instagram}" target="_blank" rel="noopener"><span class="plat">IG</span> @${contact.instagram}</a>`;
+  }
+  if(contact.tiktok){
+    links.innerHTML += `<a href="https://tiktok.com/@${contact.tiktok}" target="_blank" rel="noopener"><span class="plat">TT</span> @${contact.tiktok}</a>`;
+  }
 
   const grid = document.getElementById('proj-grid');
   grid.innerHTML='';
