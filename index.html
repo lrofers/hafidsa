@@ -131,14 +131,14 @@
   }
 
   .row{display:grid;grid-template-columns:300px 1fr;gap:28px;margin-bottom:28px;}
-  .row.bottom-row{grid-template-columns:1fr 1fr;}
+  .row.bottom-row{grid-template-columns:1fr 1fr;align-items:stretch;}
 
   .paper-note{
     background:var(--paper);
-    padding:30px 28px 44px;
+    padding:30px 28px 34px;
     position:relative;
     box-shadow:0 14px 28px rgba(0,0,0,.28);
-    clip-path:polygon(0% 0%,100% 0%,100% 92%,96% 96%,92% 91%,88% 97%,84% 92%,80% 96%,76% 91%,72% 97%,68% 92%,64% 96%,60% 91%,56% 97%,52% 92%,48% 96%,44% 91%,40% 97%,36% 92%,32% 96%,28% 91%,24% 97%,20% 92%,16% 96%,12% 91%,8% 97%,4% 92%,0% 96%);
+    border-radius:16px;
   }
   .paper-note.tilt{animation:wobble 5s ease-in-out infinite;transform-origin:center top;}
 
@@ -203,8 +203,29 @@
   .project-collage .thumb:nth-child(odd){transform:rotate(-3deg);}
   .project-collage .thumb:nth-child(even){transform:rotate(2.5deg);}
   .project-collage .thumb.gold{padding:8px 8px 22px;background:#f2c14e;}
-  .project-collage img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:2px;}
+  .project-collage img{width:100%;object-fit:cover;display:block;border-radius:2px;cursor:zoom-in;}
+  .project-collage img[data-ratio="4-5"]{aspect-ratio:4/5;}
+  .project-collage img[data-ratio="1-1"]{aspect-ratio:1/1;}
+  .project-collage img[data-ratio="16-9"]{aspect-ratio:16/9;}
+  .project-collage img[data-ratio="9-16"]{aspect-ratio:9/16;}
   .project-collage .cap{font-size:10px;color:var(--ink-muted);text-align:center;margin-top:6px;}
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    display:none;position:fixed;inset:0;z-index:200;
+    background:rgba(10,14,24,.92);
+    align-items:center;justify-content:center;padding:40px;
+    cursor:zoom-out;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:92vw;max-height:88vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 50px rgba(0,0,0,.5);}
+  .lightbox .close-btn{
+    position:absolute;top:22px;right:28px;
+    width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,.12);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;cursor:pointer;border:1px solid rgba(255,255,255,.25);
+  }
 
   /* ---------- EXPERIENCE NOTE ---------- */
   .exp-note h2{color:var(--blue);font-size:20px;margin-bottom:18px;}
@@ -296,6 +317,11 @@
   <footer>© 2025 Hafidh Sabryan Alfatih</footer>
 </div>
 
+<div class="lightbox" id="lightbox">
+  <div class="close-btn" id="lightbox-close">✕</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
 <script>
 const API_BASE = window.PORTFOLIO_API_BASE || "https://hafidsa-production.up.railway.app";
 
@@ -354,8 +380,13 @@ function render(data){
   (data.projects||[]).slice(0,4).forEach((p,i)=>{
     const el = document.createElement('div');
     el.className = 'thumb' + (i===0 ? ' gold' : '');
-    el.innerHTML = `<img src="${p.imageUrl}" alt="${p.title}"><div class="cap">${p.title}</div>`;
+    const ratio = p.ratio || 'auto';
+    const ratioAttr = ratio !== 'auto' ? `data-ratio="${ratio}"` : '';
+    el.innerHTML = `<img src="${p.imageUrl}" alt="${p.title}" ${ratioAttr}><div class="cap">${p.title}</div>`;
     collage.appendChild(el);
+  });
+  collage.querySelectorAll('img').forEach(img=>{
+    img.addEventListener('click', ()=>openLightbox(img.src));
   });
 
   const expWrap = document.getElementById('experience-badges');
@@ -391,6 +422,26 @@ async function loadData(){
   }
 }
 loadData();
+
+/* lightbox for project photos */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+function openLightbox(src){
+  lightboxImg.src = src;
+  lightbox.classList.add('open');
+}
+function closeLightbox(){
+  lightbox.classList.remove('open');
+  lightboxImg.src = '';
+}
+lightbox.addEventListener('click', closeLightbox);
+document.getElementById('lightbox-close').addEventListener('click', (e)=>{
+  e.stopPropagation();
+  closeLightbox();
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape') closeLightbox();
+});
 
 /* animate hero title letter-by-letter */
 (function(){
