@@ -51,8 +51,9 @@
   }
   .hero-blue-title h1{
     font-family:'Night House','Space Grotesk',sans-serif;font-weight:800;
-    font-size:clamp(56px,14vw,140px);
+    font-size:clamp(32px,9.5vw,120px);
     line-height:0.86;color:#0a2470;letter-spacing:1px;
+    white-space:nowrap;
     animation:glowPulse 3.5s ease-in-out infinite;
   }
   .hero-blue-title h1 .letter{
@@ -187,15 +188,6 @@
   .bio-note .about-text{
     font-size:14px;line-height:1.85;color:var(--ink);max-width:56ch;margin-bottom:22px;
   }
-  .social-row{display:flex;gap:16px;flex-wrap:wrap;}
-  .social-row a{
-    display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;
-    color:var(--ink);text-decoration:none;
-  }
-  .social-row .ic{
-    width:20px;height:20px;border-radius:5px;background:var(--blue);color:#fff;
-    display:flex;align-items:center;justify-content:center;font-size:9px;
-  }
 
   /* ---------- PROJECT NOTE ---------- */
   .project-note h2{color:var(--blue);font-size:20px;margin-bottom:6px;}
@@ -269,37 +261,35 @@
   <div class="board">
 
     <div class="row">
-      <div class="id-card">
+      <div class="id-card reveal">
         <div class="id-clip"></div>
         <div class="id-photo-wrap"><img id="id-photo" src="" alt=""></div>
         <div class="id-tag">🐾 <span id="id-handle">portfolio</span></div>
       </div>
 
       <div class="paper-note bio-note tilt">
-        <div class="script-hi script">Hi, I'm</div>
-        <h1 class="pixel sticker" id="name-heading">Name</h1>
-        <p class="about-text" id="about-text">Loading…</p>
+        <div class="script-hi script reveal">Hi, I'm</div>
+        <h1 class="pixel sticker reveal" id="name-heading">Name</h1>
+        <p class="about-text reveal" id="about-text">Loading…</p>
 
-        <div class="contact-block">
+        <div class="contact-block reveal">
           <div class="contact-title pixel sticker" style="font-size:12px;">Contact</div>
           <div id="contact-list"></div>
         </div>
-
-        <div class="social-row" id="social-row"></div>
-      </div>
     </div>
 
     <div class="row bottom-row">
       <div class="paper-note project-note tilt" id="project-anchor">
-        <h2 class="pixel sticker">My Project <span class="script-small script">Recently</span></h2>
-        <div class="project-collage" id="project-collage"></div>
+        <h2 class="pixel sticker reveal">My Project <span class="script-small script">Recently</span></h2>
+        <div class="project-collage reveal" id="project-collage"></div>
       </div>
 
       <div class="paper-note exp-note tilt" id="exp-anchor">
-        <h2 class="pixel sticker">Experience</h2>
-        <div id="experience-badges"></div>
-        <div class="skills-icons" id="skills-icons"></div>
+        <h2 class="pixel sticker reveal">Experience</h2>
+        <div id="experience-badges" class="reveal"></div>
+        <div class="skills-icons reveal" id="skills-icons"></div>
       </div>
+
     </div>
 
   </div>
@@ -339,24 +329,25 @@ function render(data){
   document.getElementById('hero-name-tag').textContent = data.name;
   document.getElementById('hero-title').textContent = data.title;
 
+  const ICONS = {
+    whatsapp: '<svg viewBox="0 0 24 24" fill="#fff" width="60%" height="60%"><path d="M12.02 2C6.5 2 2.02 6.48 2.02 12c0 1.77.46 3.45 1.27 4.9L2 22l5.25-1.38A9.94 9.94 0 0 0 12.02 22C17.55 22 22 17.52 22 12S17.55 2 12.02 2zm0 18.1c-1.6 0-3.13-.43-4.46-1.24l-.32-.19-3.12.82.83-3.04-.2-.31A8.07 8.07 0 0 1 3.9 12c0-4.48 3.65-8.12 8.12-8.12S20.14 7.52 20.14 12s-3.65 8.1-8.12 8.1zm4.48-6.06c-.24-.12-1.44-.71-1.66-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.78.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.01-.37.11-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.32-.75-1.8-.2-.48-.4-.42-.55-.42-.14 0-.3-.02-.46-.02-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.02 0 1.19.87 2.34.99 2.5.12.16 1.71 2.61 4.14 3.66.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" width="58%" height="58%"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="#fff" stroke="none"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="#fff" width="52%" height="52%"><path d="M16.5 2h-3.1v13.7c0 1.5-1.2 2.7-2.7 2.7-1.5 0-2.7-1.2-2.7-2.7 0-1.5 1.2-2.7 2.7-2.7.3 0 .5 0 .8.1V9.9c-.3 0-.5-.1-.8-.1-3.2 0-5.8 2.6-5.8 5.8s2.6 5.8 5.8 5.8 5.8-2.6 5.8-5.8V8.4c1.2.9 2.7 1.4 4.3 1.4V6.6c-2.4 0-4.3-1.9-4.3-4.3V2z"/></svg>'
+  };
+
   const contact = data.contact || {};
   const contactList = document.getElementById('contact-list');
   contactList.innerHTML = '';
   if(contact.whatsapp){
     const digits = contact.whatsapp.replace(/[^0-9]/g,'').replace(/^0/,'62');
-    contactList.innerHTML += `<div class="contact-row"><span class="ic" style="background:var(--green)">W</span><a href="https://wa.me/${digits}" target="_blank" rel="noopener">${contact.whatsapp}</a></div>`;
+    contactList.innerHTML += `<div class="contact-row"><span class="ic" style="background:var(--green)">${ICONS.whatsapp}</span><a href="https://wa.me/${digits}" target="_blank" rel="noopener">${contact.whatsapp}</a></div>`;
   }
   if(contact.instagram){
-    contactList.innerHTML += `<div class="contact-row"><span class="ic" style="background:var(--pink)">IG</span><a href="https://instagram.com/${contact.instagram}" target="_blank" rel="noopener">@${contact.instagram}</a></div>`;
+    contactList.innerHTML += `<div class="contact-row"><span class="ic" style="background:linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7)">${ICONS.instagram}</span><a href="https://instagram.com/${contact.instagram}" target="_blank" rel="noopener">@${contact.instagram}</a></div>`;
   }
   if(contact.tiktok){
-    contactList.innerHTML += `<div class="contact-row"><span class="ic" style="background:#000">TT</span><a href="https://tiktok.com/@${contact.tiktok}" target="_blank" rel="noopener">@${contact.tiktok}</a></div>`;
+    contactList.innerHTML += `<div class="contact-row"><span class="ic" style="background:#000">${ICONS.tiktok}</span><a href="https://tiktok.com/@${contact.tiktok}" target="_blank" rel="noopener">@${contact.tiktok}</a></div>`;
   }
-
-  const socialRow = document.getElementById('social-row');
-  socialRow.innerHTML = '';
-  if(contact.instagram) socialRow.innerHTML += `<a href="https://instagram.com/${contact.instagram}" target="_blank" rel="noopener"><span class="ic">IG</span> ${contact.instagram}</a>`;
-  if(contact.tiktok) socialRow.innerHTML += `<a href="https://tiktok.com/@${contact.tiktok}" target="_blank" rel="noopener"><span class="ic">TT</span> ${contact.tiktok}</a>`;
 
   const collage = document.getElementById('project-collage');
   collage.innerHTML = '';
@@ -404,19 +395,14 @@ loadData();
 /* animate hero title letter-by-letter */
 (function(){
   const titleEl = document.getElementById('hero-big-title');
-  const words = ['Port','folio'];
+  const word = 'Portofolio';
   titleEl.innerHTML = '';
-  let idx = 0;
-  words.forEach((word, wi)=>{
-    word.split('').forEach(ch=>{
-      const span = document.createElement('span');
-      span.className = 'letter';
-      span.textContent = ch;
-      span.style.animationDelay = (idx * 0.06) + 's';
-      titleEl.appendChild(span);
-      idx++;
-    });
-    if(wi === 0) titleEl.appendChild(document.createElement('br'));
+  word.split('').forEach((ch, idx)=>{
+    const span = document.createElement('span');
+    span.className = 'letter';
+    span.textContent = ch;
+    span.style.animationDelay = (idx * 0.06) + 's';
+    titleEl.appendChild(span);
   });
 })();
 
