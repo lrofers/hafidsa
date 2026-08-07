@@ -336,6 +336,22 @@ function populateForm(){
   renderRepeater('experience', state.experience);
 }
 
+/* ---------- PHOTO PROFIL UTAMA ---------- */
+document.getElementById('photo-input').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('photo-upload-status');
+  statusEl.textContent = 'Mengunggah...';
+  try{
+    const url = await uploadImage(file);
+    state.photoUrl = url;
+    document.getElementById('photo-preview').src = url;
+    statusEl.textContent = 'Terunggah.';
+  }catch(err){
+    statusEl.textContent = err.message || 'Gagal upload';
+  }
+});
+
 /* ---------- SKILLS ---------- */
 function renderSkills(){
   const wrap = document.getElementById('skills-repeater');
@@ -514,59 +530,41 @@ document.getElementById('add-experience').addEventListener('click', ()=>{
   renderRepeater('experience', state.experience);
 });
 
-/* ---------- MAIN PHOTO ---------- */
-document.getElementById('photo-input').addEventListener('change', async (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  const statusEl = document.getElementById('photo-upload-status');
-  const preview = document.getElementById('photo-preview');
-  preview.src = URL.createObjectURL(file);
-  statusEl.textContent = 'Mengunggah...';
-  try{
-    const url = await uploadImage(file);
-    state.photoUrl = url;
-    preview.src = url;
-    statusEl.textContent = 'Terunggah.';
-  }catch(err){
-    statusEl.textContent = err.message || 'Gagal upload';
-  }
-});
-
 /* ---------- SAVE ---------- */
 document.getElementById('save-btn').addEventListener('click', async ()=>{
   const msg = document.getElementById('save-msg');
   msg.className = 'msg';
-  msg.textContent = 'Saving…';
+  msg.textContent = 'Menyimpan...';
 
   state.name = document.getElementById('f-name').value;
   state.title = document.getElementById('f-title').value;
   state.about = document.getElementById('f-about').value;
   state.contact = {
-    whatsapp: document.getElementById('f-whatsapp').value.trim(),
-    instagram: document.getElementById('f-instagram').value.trim().replace(/^@/,''),
-    tiktok: document.getElementById('f-tiktok').value.trim().replace(/^@/,'')
+    whatsapp: document.getElementById('f-whatsapp').value,
+    instagram: document.getElementById('f-instagram').value,
+    tiktok: document.getElementById('f-tiktok').value
   };
 
   try{
     const res = await apiFetch('/api/portfolio', {
-      method:'PUT',
-      headers:{ 'Content-Type':'application/json' },
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(state)
     });
     if(!res.ok){
-      throw new Error(await extractError(res, 'Save failed'));
+      throw new Error(await extractError(res, 'Gagal menyimpan'));
     }
-
+    state = await res.json();
     msg.className = 'msg ok';
     msg.textContent = 'Tersimpan.';
   }catch(err){
     msg.className = 'msg error';
-    msg.textContent = err.message || 'Something went wrong.';
+    msg.textContent = err.message || 'Gagal menyimpan';
   }
 });
 
-/* ---------- BOOT ---------- */
-(async function boot(){
+/* ---------- INIT ---------- */
+(async function init(){
   if(getToken()){
     try{
       await loadPortfolio();
