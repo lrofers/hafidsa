@@ -203,10 +203,11 @@
   .project-note h2{color:var(--blue);font-size:20px;margin-bottom:6px;}
   .project-note .script-small{font-size:16px;color:var(--pink);margin-left:6px;}
   .project-collage{
-    display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px;margin-top:18px;
+    align-items:start;
   }
   .project-collage .thumb{
-    width:150px;border-radius:6px;overflow:hidden;
+    width:100%;min-width:0;border-radius:6px;overflow:hidden;
     box-shadow:0 8px 16px rgba(0,0,0,.25);
     background:#fff;padding:6px 6px 20px;
   }
@@ -258,6 +259,9 @@
   footer{text-align:center;color:rgba(255,255,255,.7);font-size:11px;margin-top:30px;}
 
   @media(max-width:800px){
+    .project-collage{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px;}
+    .project-collage .thumb{width:100%;}
+
     .row, .row.bottom-row{grid-template-columns:1fr;}
     .board{padding:34px 20px;}
     .clip-pin{left:auto;right:14px;top:-20px;animation:swingPinCorner 4.5s ease-in-out infinite;}
@@ -268,27 +272,27 @@
   .sticker-deco{position:absolute;pointer-events:none;z-index:6;filter:drop-shadow(0 8px 14px rgba(0,0,0,.3));}
   .sticker-tl{top:-18px;left:-18px;}
   .sticker-tr{top:-18px;right:-18px;}
-  .sticker-bl{bottom:-18px;left:-18px;}
+  .sticker-bl{bottom:-18px;left:12px;}
   .sticker-br{bottom:-18px;right:-18px;}
 
-  .sticker-boo{width:90px;animation:floatY 3.4s ease-in-out infinite;}
-  .sticker-sleepy{width:64px;animation:wobble 4.2s ease-in-out infinite;}
-  .sticker-blush{width:70px;animation:floatY 3.8s ease-in-out infinite reverse;}
-  .sticker-heart{width:66px;animation:stickerPulse 2.6s ease-in-out infinite;}
-  .sticker-headset{width:72px;animation:wobble 4.6s ease-in-out infinite;}
-  .sticker-icecream{width:70px;animation:floatY 3.2s ease-in-out infinite;}
-  .sticker-blanket{width:80px;animation:floatY 3.6s ease-in-out infinite reverse;}
+  .sticker-boo{width:105px;animation:floatY 3.4s ease-in-out infinite;}
+  .sticker-sleepy{width:98px;animation:wobble 4.2s ease-in-out infinite;}
+  .sticker-blush{width:100px;animation:floatY 3.8s ease-in-out infinite reverse;}
+  .sticker-heart{width:96px;animation:stickerPulse 2.6s ease-in-out infinite;}
+  .sticker-headset{width:85px;animation:wobble 4.6s ease-in-out infinite;}
+  .sticker-icecream{width:82px;animation:floatY 3.2s ease-in-out infinite;}
+  .sticker-blanket{width:95px;animation:floatY 3.6s ease-in-out infinite reverse;}
   @media(max-width:800px){
-    .sticker-boo{width:56px;}
-    .sticker-sleepy{width:42px;}
-    .sticker-blush{width:48px;}
-    .sticker-heart{width:44px;}
-    .sticker-headset{width:50px;}
-    .sticker-icecream{width:44px;}
-    .sticker-blanket{width:50px;}
+    .sticker-boo{width:78px;}
+    .sticker-sleepy{width:80px;}
+    .sticker-blush{width:84px;}
+    .sticker-heart{width:80px;}
+    .sticker-headset{width:62px;}
+    .sticker-icecream{width:55px;}
+    .sticker-blanket{width:62px;}
     .sticker-tl{top:-12px;left:-12px;}
     .sticker-tr{top:-12px;right:-12px;}
-    .sticker-bl{bottom:-12px;left:-12px;}
+    .sticker-bl{bottom:-12px;left:8px;}
     .sticker-br{bottom:-12px;right:-12px;}
   }
 </style>
@@ -298,15 +302,15 @@
 <!-- HERO / OPENING -->
 <section id="hero">
   <div class="hero-blue-title reveal">
-    <h1 id="hero-big-title" class="sticker">Port<br>folio</h1>
+    <h1 id="hero-big-title" class="sticker">Porto<br>folio</h1>
   </div>
   <div class="hero-tags">
-    <div class="hero-tag reveal" style="transition-delay:.15s">2025 Edition</div>
+    <div class="hero-tag reveal" style="transition-delay:.15s">2026 Edition</div>
     <div class="hero-tag reveal" style="transition-delay:.3s">
       <span class="accent-dot"></span>
       <div>
         <div id="hero-name-tag">Hafidh Sabryan Alfatih</div>
-        <div id="hero-title" class="hero-role-sub">Content Creator</div>
+        <div id="hero-title" class="hero-role-sub">Pembisnis, Editor, Desainer, Content Creator</div>
       </div>
     </div>
   </div>
@@ -363,7 +367,7 @@
     </div>
 
   </div>
-  <footer>© 2025 Hafidh Sabryan Alfatih</footer>
+  <footer>© 2026 Hafidh Sabryan Alfatih</footer>
 </div>
 
 <div class="lightbox" id="lightbox">
