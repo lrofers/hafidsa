@@ -5,33 +5,49 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hafidh Sabryan Alfatih — Portfolio 2025</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-deep:#05070c;
+    --bg-deep:#0a2470;
     --panel-navy:#0b1626;
     --panel-navy-2:#123152;
     --panel-navy-3:#1a4270;
     --accent-red-1:#c23b3b;
     --accent-red-2:#6e1420;
-    --cyan-glow:#4fb3e8;
+    --cyan-glow:#7fd4ff;
     --text-primary:#eef3f8;
-    --text-muted:#8ea3b8;
-    --text-dim:#5c7086;
-    --line:rgba(255,255,255,0.08);
+    --text-muted:#c9d4f2;
+    --text-dim:#93a3cf;
+    --line:rgba(255,255,255,0.14);
+    --blueprint-bg:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.07) 0 1px, transparent 1px 42px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.07) 0 1px, transparent 1px 42px),
+      linear-gradient(135deg, #1a52d6 0%, #0f37a8 55%, #0a2470 100%);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--bg-deep);
+    background:var(--blueprint-bg);
+    background-attachment:fixed;
     color:var(--text-primary);
     font-family:'Inter',sans-serif;
     -webkit-font-smoothing:antialiased;
   }
   ::selection{background:var(--accent-red-1);color:#fff;}
 
-  .display{font-family:'Anton',sans-serif;font-weight:400;letter-spacing:.5px;}
-  .hud{font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;}
+  .display{font-family:'Space Grotesk',sans-serif;font-weight:800;letter-spacing:.2px;}
+  .hud{font-family:'Space Mono',monospace;font-weight:700;letter-spacing:2px;text-transform:uppercase;}
+
+  /* ---------- TEXT REVEAL ANIMATION ---------- */
+  .reveal{
+    opacity:0;transform:translateY(26px);
+    transition:opacity .8s ease, transform .8s ease;
+  }
+  .reveal-visible{opacity:1;transform:translateY(0);}
+  @keyframes glowPulse{
+    0%,100%{filter:drop-shadow(0 0 0 rgba(255,255,255,0));}
+    50%{filter:drop-shadow(0 0 16px rgba(255,255,255,.28));}
+  }
 
   /* ---------- NAV ---------- */
   .navwrap{
@@ -66,7 +82,7 @@
     border:1px solid var(--line);
     border-radius:8px;
     display:flex;align-items:center;justify-content:center;
-    font-family:'Anton',sans-serif;
+    font-family:'Space Grotesk',sans-serif;font-weight:800;
     background:rgba(10,18,30,0.72);
     backdrop-filter:blur(10px);
   }
@@ -84,75 +100,47 @@
 
   /* ---------- HERO ---------- */
   #hero{
-    background:
-      radial-gradient(ellipse 900px 500px at 15% 55%, rgba(26,66,112,0.55), transparent 60%),
-      linear-gradient(180deg,#070c14 0%, #0a1626 100%);
+    background:radial-gradient(ellipse 900px 550px at 50% 30%, rgba(255,255,255,0.10), transparent 60%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:32px;text-align:center;
   }
-  .hero-inner{
-    display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;
+  .hero-blue-title h1{
+    font-family:'Space Grotesk',sans-serif;font-weight:800;
+    font-size:clamp(64px,15vw,150px);
+    line-height:0.86;
+    color:#fff;
+    letter-spacing:-1px;
+    text-shadow:
+      3px 3px 0 #0a2470, 6px 6px 0 #0a2470, 9px 9px 0 #0a2470,
+      12px 12px 0 #0a2470, 16px 16px 26px rgba(0,0,0,.4);
+    animation:glowPulse 3.5s ease-in-out infinite;
   }
-  .hero-photo-row{
-    display:flex;align-items:center;gap:0;margin-bottom:28px;
+  .hero-tags{
+    display:flex;gap:16px;flex-wrap:wrap;justify-content:center;align-items:center;
   }
-  .hero-photo{
-    position:relative;
-    width:200px;height:240px;flex-shrink:0;
-    display:flex;align-items:center;
+  .hero-tag{
+    background:rgba(6,10,24,0.55);
+    backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius:999px;
+    padding:10px 20px;
+    font-size:11.5px;color:#eaf0fb;
+    display:flex;align-items:center;gap:10px;
   }
-  .hero-photo .redblob{
-    position:absolute;
-    left:-90px;top:50%;transform:translateY(-50%);
-    width:260px;height:260px;border-radius:50%;
-    background:radial-gradient(circle at 35% 35%, var(--accent-red-1), var(--accent-red-2) 70%);
-    z-index:1;
-  }
-  .hero-photo img{
-    position:relative;z-index:2;
-    width:190px;height:240px;
-    object-fit:cover;
-    border-radius:4px;
-    display:block;
-    margin-left:20px;
-  }
-  .hero-text .eyebrow{
-    color:var(--cyan-glow);
-    font-size:13px;
-    margin-bottom:10px;
-  }
-  .hero-text h1{
-    font-size:clamp(48px,8vw,96px);
-    line-height:0.95;
-    background:linear-gradient(180deg,#fdfefe 10%,#9aacc0 55%,#f3f6f9 95%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-  }
-  .hero-year{
-    display:inline-block;margin-top:6px;
-    font-family:'Rajdhani',sans-serif;font-weight:600;
-    font-size:22px;color:var(--text-muted);letter-spacing:4px;
-  }
-  .hero-role{
-    margin-top:22px;
-    display:inline-flex;align-items:center;gap:10px;
-    font-size:13px;color:var(--text-muted);
-    justify-content:center;
-  }
-  .hero-role span.chk{
-    width:12px;height:12px;border:1px solid var(--text-muted);display:inline-block;
-  }
+  .hero-tag .accent-dot{width:8px;height:8px;border-radius:50%;background:#ff7a45;flex-shrink:0;}
+  .hero-role-sub{color:#b9c6e6;font-size:9.5px;margin-top:2px;font-weight:600;letter-spacing:1.5px;text-align:left;}
   .hero-menu{
-    margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:14px;
+    display:flex;gap:22px;flex-wrap:wrap;justify-content:center;
   }
   .hero-menu a{
-    color:var(--text-muted);text-decoration:none;font-size:13px;
+    color:#c7d3ee;text-decoration:none;font-size:12px;
     letter-spacing:3px;transition:color .2s;
   }
   .hero-menu a:hover{color:#fff;}
 
   /* ---------- PROFILE ---------- */
   #profile{
-    background:linear-gradient(180deg,#0a1524 0%, #0d1c30 100%);
+    background:radial-gradient(ellipse 800px 500px at 20% 40%, rgba(255,255,255,0.08), transparent 60%);
   }
   .profile-grid{
     display:grid;
@@ -193,7 +181,7 @@
   .skill-badge{
     width:46px;height:46px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
-    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;
+    font-family:'Space Mono',monospace;font-weight:700;font-size:14px;
     color:#fff;
     box-shadow:0 4px 14px rgba(0,0,0,.35);
   }
@@ -207,11 +195,11 @@
 
   /* ---------- PROJECTS ---------- */
   #projects{
-    background:radial-gradient(ellipse 1000px 500px at 80% 20%, rgba(26,66,112,.35), transparent 60%), #05080f;
+    background:radial-gradient(ellipse 1000px 500px at 80% 20%, rgba(255,255,255,0.08), transparent 60%);
   }
   .proj-head{display:flex;align-items:baseline;gap:14px;margin-bottom:34px;}
   .proj-head span.tag{
-    font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;
+    font-family:'Space Mono',monospace;font-weight:700;font-size:11px;
     border:1px solid var(--line);padding:4px 10px;border-radius:5px;color:var(--text-muted);
   }
   .proj-grid{
@@ -235,7 +223,7 @@
 
   /* ---------- CONTACT ---------- */
   #contact{
-    background:linear-gradient(180deg,#0a1524 0%,#050810 100%);
+    background:radial-gradient(ellipse 800px 500px at 50% 60%, rgba(255,255,255,0.08), transparent 60%);
     border-bottom:none;
   }
   .contact-grid{
@@ -264,7 +252,7 @@
   }
   footer{
     text-align:center;padding:22px;color:var(--text-dim);font-size:11px;
-    background:#050810;
+    background:transparent;
   }
 
   @media(max-width:860px){
@@ -291,22 +279,23 @@
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-inner">
-    <div class="hero-photo-row">
-      <div class="hero-photo">
-        <div class="redblob"></div>
-        <img id="hero-photo" src="" alt="Hafidh Sabryan Alfatih">
-      </div>
-      <h1 class="display">Portfolio<span class="hero-year"> 2025</span></h1>
-    </div>
-    <div class="hero-text">
-      <div class="hero-role hud"><span class="chk"></span> <span id="hero-title">Content Creator</span></div>
-      <div class="hero-menu hud">
-        <a href="#profile">Start</a>
-        <a href="#projects">Options</a>
-        <a href="#contact">Exit</a>
+  <div class="hero-blue-title reveal">
+    <h1 class="display">Port<br>folio</h1>
+  </div>
+  <div class="hero-tags">
+    <div class="hero-tag hud reveal" style="transition-delay:.15s">2025 Edition</div>
+    <div class="hero-tag hud reveal" style="transition-delay:.3s">
+      <span class="accent-dot"></span>
+      <div>
+        <div id="hero-name-tag">Hafidh Sabryan Alfatih</div>
+        <div id="hero-title" class="hero-role-sub">Content Creator</div>
       </div>
     </div>
+  </div>
+  <div class="hero-menu hud reveal" style="transition-delay:.45s">
+    <a href="#profile">Start</a>
+    <a href="#projects">Options</a>
+    <a href="#contact">Exit</a>
   </div>
 </section>
 
@@ -320,7 +309,7 @@
       <div class="kicker hud">Hello, I am</div>
       <div class="profile-name display" style="font-size:26px;" id="profile-name">Hafidh Sabryan Alfatih</div>
 
-      <h2 class="section-title display">About Me</h2>
+      <h2 class="section-title display reveal">About Me</h2>
       <p class="about-text" id="about-text">Loading…</p>
 
       <div class="block-label hud">Software Skills</div>
@@ -348,7 +337,7 @@
 <!-- PROJECTS -->
 <section id="projects">
   <div class="proj-head">
-    <h2 class="section-title display" style="margin-bottom:0;">Recap Project 2025</h2>
+    <h2 class="section-title display reveal" style="margin-bottom:0;">Recap Project 2025</h2>
     <span class="tag hud">No AI</span>
   </div>
   <div class="proj-grid" id="proj-grid"></div>
@@ -368,7 +357,7 @@
       </div>
     </div>
     <div class="thankyou">
-      <h2 class="display">Thank You<br>2025</h2>
+      <h2 class="display reveal">Thank You<br>2025</h2>
     </div>
   </div>
 </section>
@@ -419,10 +408,10 @@ const FALLBACK = {
 };
 
 function render(data){
-  document.getElementById('hero-photo').src = data.photoUrl;
   document.getElementById('profile-photo').src = data.photoUrl;
   document.getElementById('contact-photo').src = data.photoUrl;
   document.getElementById('hero-title').textContent = data.title;
+  document.getElementById('hero-name-tag').textContent = data.name;
   document.getElementById('profile-name').textContent = data.name;
   document.getElementById('contact-name').textContent = data.name;
   document.getElementById('about-text').textContent = data.about;
@@ -513,6 +502,18 @@ const spy = new IntersectionObserver((entries)=>{
   });
 },{threshold:0.5});
 sections.forEach(s=>spy.observe(s));
+
+/* reveal-on-view text animation */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('reveal-visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+},{threshold:0.2});
+revealEls.forEach(el=>revealObserver.observe(el));
 </script>
 </body>
 </html>
