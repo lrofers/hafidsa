@@ -89,7 +89,10 @@
       linear-gradient(180deg,#070c14 0%, #0a1626 100%);
   }
   .hero-inner{
-    display:flex;align-items:center;gap:40px;flex-wrap:wrap;
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;
+  }
+  .hero-photo-row{
+    display:flex;align-items:center;gap:0;margin-bottom:28px;
   }
   .hero-photo{
     position:relative;
@@ -133,18 +136,19 @@
     margin-top:22px;
     display:inline-flex;align-items:center;gap:10px;
     font-size:13px;color:var(--text-muted);
+    justify-content:center;
   }
   .hero-role span.chk{
     width:12px;height:12px;border:1px solid var(--text-muted);display:inline-block;
   }
   .hero-menu{
-    margin-top:34px;display:flex;flex-direction:column;gap:14px;
+    margin-top:26px;display:flex;flex-direction:column;align-items:center;gap:14px;
   }
   .hero-menu a{
     color:var(--text-muted);text-decoration:none;font-size:13px;
-    letter-spacing:3px;transition:color .2s, padding-left .2s;
+    letter-spacing:3px;transition:color .2s;
   }
-  .hero-menu a:hover{color:#fff;padding-left:8px;}
+  .hero-menu a:hover{color:#fff;}
 
   /* ---------- PROFILE ---------- */
   #profile{
@@ -187,7 +191,7 @@
   }
   .skills-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px;}
   .skill-badge{
-    width:46px;height:46px;border-radius:11px;
+    width:46px;height:46px;border-radius:50%;
     display:flex;align-items:center;justify-content:center;
     font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;
     color:#fff;
@@ -248,8 +252,8 @@
   }
   .contact-links a:hover{color:#fff;}
   .contact-links .plat{
-    width:20px;height:20px;border-radius:5px;background:var(--panel-navy-3);
-    display:inline-flex;align-items:center;justify-content:center;font-size:10px;
+    width:22px;height:22px;border-radius:50%;background:var(--panel-navy-3);
+    display:inline-flex;align-items:center;justify-content:center;font-size:9px;
   }
   .thankyou h2{
     font-size:clamp(40px,7vw,80px);
@@ -288,12 +292,14 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-inner">
-    <div class="hero-photo">
-      <div class="redblob"></div>
-      <img id="hero-photo" src="" alt="Hafidh Sabryan Alfatih">
+    <div class="hero-photo-row">
+      <div class="hero-photo">
+        <div class="redblob"></div>
+        <img id="hero-photo" src="" alt="Hafidh Sabryan Alfatih">
+      </div>
+      <h1 class="display">Portfolio<span class="hero-year"> 2025</span></h1>
     </div>
     <div class="hero-text">
-      <h1 class="display">Portfolio<span class="hero-year"> 2025</span></h1>
       <div class="hero-role hud"><span class="chk"></span> <span id="hero-title">Content Creator</span></div>
       <div class="hero-menu hud">
         <a href="#profile">Start</a>
@@ -431,7 +437,7 @@ function render(data){
       el.style.background = 'transparent';
       el.style.padding = '0';
       el.style.overflow = 'hidden';
-      el.innerHTML = `<img src="${s.iconUrl}" alt="${s.name||s.label}" style="width:100%;height:100%;object-fit:cover;border-radius:11px;">`;
+      el.innerHTML = `<img src="${s.iconUrl}" alt="${s.name||s.label}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
     }else{
       el.style.background = s.color || '#16324f';
       el.textContent = s.label;
