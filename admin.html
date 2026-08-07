@@ -193,6 +193,17 @@
     <button class="add-btn" id="add-experience">+ Add Experience</button>
   </div>
 
+  <div class="card">
+    <h2>Contact</h2>
+    <div class="hint">Ini yang muncul di bagian "Contact Me" — orang bisa klik langsung ke WhatsApp/Instagram/TikTok Anda.</div>
+    <label>Nomor WhatsApp (contoh: 085349391484)</label>
+    <input id="f-whatsapp" placeholder="0851xxxxxxx">
+    <label>Username Instagram (tanpa @)</label>
+    <input id="f-instagram" placeholder="lrofers">
+    <label>Username TikTok (tanpa @)</label>
+    <input id="f-tiktok" placeholder="lrofers">
+  </div>
+
   <div class="save-bar">
     <div class="msg" id="save-msg" style="flex:1;"></div>
     <button id="save-btn" style="max-width:200px;">Save Changes</button>
@@ -311,6 +322,10 @@ function populateForm(){
   document.getElementById('f-name').value = state.name || '';
   document.getElementById('f-title').value = state.title || '';
   document.getElementById('f-about').value = state.about || '';
+  state.contact = state.contact || {};
+  document.getElementById('f-whatsapp').value = state.contact.whatsapp || '';
+  document.getElementById('f-instagram').value = state.contact.instagram || '';
+  document.getElementById('f-tiktok').value = state.contact.tiktok || '';
   renderSkills();
   renderProjects();
   renderRepeater('education', state.education);
@@ -509,6 +524,11 @@ document.getElementById('save-btn').addEventListener('click', async ()=>{
   state.name = document.getElementById('f-name').value;
   state.title = document.getElementById('f-title').value;
   state.about = document.getElementById('f-about').value;
+  state.contact = {
+    whatsapp: document.getElementById('f-whatsapp').value.trim(),
+    instagram: document.getElementById('f-instagram').value.trim().replace(/^@/,''),
+    tiktok: document.getElementById('f-tiktok').value.trim().replace(/^@/,'')
+  };
 
   try{
     const res = await apiFetch('/api/portfolio', {
