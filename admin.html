@@ -19,7 +19,13 @@
   .hud{font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;}
   .display{font-family:'Anton',sans-serif;}
 
-  /* login screen */
+  #setup-banner{
+    display:none;
+    background:#3a2410;border-bottom:1px solid #7a4d18;color:#f0c37a;
+    font-size:12.5px;padding:12px 20px;line-height:1.6;
+  }
+  #setup-banner code{background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:4px;}
+
   #login-screen{
     min-height:100vh;display:flex;align-items:center;justify-content:center;
     background:radial-gradient(ellipse 900px 500px at 50% 40%, rgba(26,66,112,.4), transparent 60%);
@@ -47,7 +53,6 @@
   .msg.error{color:#e88;}
   .msg.ok{color:#8ec9a1;}
 
-  /* dashboard */
   #dashboard{display:none;max-width:920px;margin:0 auto;padding:40px 24px 100px;}
   .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px;}
   .topbar h1{font-size:20px;}
@@ -79,10 +84,8 @@
   }
   .skill-swatch img{width:100%;height:100%;object-fit:cover;}
   .skill-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;}
-  .thumb-upload{display:flex;flex-direction:column;gap:6px;}
-  .thumb-upload input[type=file]{
-    font-size:11px;padding:6px;margin-bottom:0;
-  }
+  .thumb-upload{display:flex;flex-direction:column;gap:6px;flex:1;}
+  .thumb-upload input[type=file]{font-size:11px;padding:6px;margin-bottom:0;}
   .proj-thumb{
     width:100%;height:100px;object-fit:cover;border-radius:6px;margin-bottom:10px;
     background:#081221;border:1px solid var(--line);display:block;
@@ -99,6 +102,29 @@
 </style>
 </head>
 <body>
+
+<!--
+  ============================================================
+  FOTO / GAMBAR di panel ini di-upload ke Cloudinary (gratis),
+  bukan disimpan langsung di JSONBin — supaya tidak kena limit
+  100KB per dokumen di paket gratis JSONBin.
+
+  Isi 2 baris di bawah ini dengan punya Anda sendiri:
+  1. Daftar gratis di https://cloudinary.com
+  2. Ambil "Cloud Name" dari Dashboard
+  3. Settings (ikon gear) -> Upload -> Add upload preset ->
+     Signing Mode: UNSIGNED -> Save -> copy nama presetnya
+  ============================================================
+-->
+<script>
+  window.CLOUDINARY_CLOUD_NAME = "tbqpdlwz";
+  window.CLOUDINARY_UPLOAD_PRESET = "a9irfyy0";
+</script>
+
+<div id="setup-banner">
+  ⚠️ Upload foto belum aktif — isi <code>CLOUDINARY_CLOUD_NAME</code> dan <code>CLOUDINARY_UPLOAD_PRESET</code>
+  di bagian atas file admin.html ini dulu. Lihat komentar di kode sumber untuk caranya.
+</div>
 
 <!-- ===================== LOGIN ===================== -->
 <div id="login-screen">
@@ -174,10 +200,6 @@
 </div>
 
 <script>
-/* ============================================================
-   CONFIG — point this at your own backend.
-   See API_CONTRACT.md for exactly what each endpoint must do.
-   ============================================================ */
 const API_BASE = window.PORTFOLIO_API_BASE || "https://hafidsa-production.up.railway.app";
 
 let state = null;
@@ -186,6 +208,10 @@ const tokenKey = 'portfolio_admin_token';
 const getToken = () => sessionStorage.getItem(tokenKey);
 const setToken = (t) => sessionStorage.setItem(tokenKey, t);
 const clearToken = () => sessionStorage.removeItem(tokenKey);
+
+if(window.CLOUDINARY_CLOUD_NAME === 'YOUR_CLOUD_NAME'){
+  document.getElementById('setup-banner').style.display = 'block';
+}
 
 function showDashboard(){
   document.getElementById('login-screen').style.display = 'none';
@@ -217,17 +243,25 @@ async function extractError(res, fallback){
   }
 }
 
-/* Uploads a file immediately and returns the resulting data-URL. */
-async function uploadImage(file, kind){
+/* Uploads a file straight to Cloudinary (unsigned) and returns its URL.
+   This never touches JSONBin, so it isn't limited by JSONBin's 100KB cap. */
+async function uploadImage(file){
+  if(window.CLOUDINARY_CLOUD_NAME === 'YOUR_CLOUD_NAME'){
+    throw new Error('Cloudinary belum di-setup. Lihat pesan kuning di atas halaman.');
+  }
   const fd = new FormData();
-  fd.append('photo', file);
-  fd.append('kind', kind);
-  const res = await apiFetch('/api/upload-photo', { method:'POST', body: fd });
+  fd.append('file', file);
+  fd.append('upload_preset', window.CLOUDINARY_UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${window.CLOUDINARY_CLOUD_NAME}/image/upload`, {
+    method:'POST',
+    body: fd
+  });
   if(!res.ok){
-    throw new Error(await extractError(res, 'Upload gagal'));
+    const body = await res.json().catch(()=>({}));
+    throw new Error(body.error?.message || 'Upload ke Cloudinary gagal');
   }
   const data = await res.json();
-  return data.photoUrl;
+  return data.secure_url;
 }
 
 /* ---------- LOGIN ---------- */
@@ -331,7 +365,7 @@ function renderSkills(){
       const statusEl = document.getElementById(`skill-status-${idx}`);
       statusEl.textContent = 'Mengunggah...';
       try{
-        const url = await uploadImage(file, 'skill');
+        const url = await uploadImage(file);
         state.skills[idx].iconUrl = url;
         statusEl.textContent = 'Terunggah.';
         renderSkills();
@@ -393,7 +427,7 @@ function renderProjects(){
       const statusEl = document.getElementById(`proj-status-${idx}`);
       statusEl.textContent = 'Mengunggah...';
       try{
-        const url = await uploadImage(file, 'project');
+        const url = await uploadImage(file);
         state.projects[idx].imageUrl = url;
         document.getElementById(`proj-thumb-${idx}`).src = url;
         statusEl.textContent = 'Terunggah.';
@@ -448,7 +482,7 @@ document.getElementById('add-experience').addEventListener('click', ()=>{
   renderRepeater('experience', state.experience);
 });
 
-/* ---------- MAIN PHOTO (uploads immediately on selection) ---------- */
+/* ---------- MAIN PHOTO ---------- */
 document.getElementById('photo-input').addEventListener('change', async (e)=>{
   const file = e.target.files[0];
   if(!file) return;
@@ -457,7 +491,7 @@ document.getElementById('photo-input').addEventListener('change', async (e)=>{
   preview.src = URL.createObjectURL(file);
   statusEl.textContent = 'Mengunggah...';
   try{
-    const url = await uploadImage(file, 'profile');
+    const url = await uploadImage(file);
     state.photoUrl = url;
     preview.src = url;
     statusEl.textContent = 'Terunggah.';
