@@ -421,7 +421,7 @@ function render(data){
 
   const collage = document.getElementById('project-collage');
   collage.innerHTML = '';
-  (data.projects||[]).slice(0,4).forEach((p,i)=>{
+  (data.projects||[]).forEach((p,i)=>{
     const el = document.createElement('div');
     el.className = 'thumb' + (i===0 ? ' gold' : '');
     const ratio = p.ratio || 'auto';
