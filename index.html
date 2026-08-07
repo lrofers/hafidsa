@@ -89,26 +89,27 @@
       linear-gradient(180deg,#070c14 0%, #0a1626 100%);
   }
   .hero-inner{
-    display:flex;align-items:center;gap:48px;flex-wrap:wrap;
+    display:flex;align-items:center;gap:40px;flex-wrap:wrap;
   }
   .hero-photo{
     position:relative;
-    width:220px;height:220px;flex-shrink:0;
+    width:200px;height:240px;flex-shrink:0;
+    display:flex;align-items:center;
   }
-  .hero-photo .glow{
-    position:absolute;inset:-20px;
-    background:radial-gradient(circle, var(--accent-red-1), var(--accent-red-2) 60%, transparent 75%);
-    border-radius:50%;
-    filter:blur(2px);
-    opacity:.9;
+  .hero-photo .redblob{
+    position:absolute;
+    left:-90px;top:50%;transform:translateY(-50%);
+    width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, var(--accent-red-1), var(--accent-red-2) 70%);
+    z-index:1;
   }
   .hero-photo img{
-    position:relative;
-    width:100%;height:100%;
+    position:relative;z-index:2;
+    width:190px;height:240px;
     object-fit:cover;
-    border-radius:50%;
+    border-radius:4px;
     display:block;
-    border:2px solid rgba(255,255,255,0.15);
+    margin-left:20px;
   }
   .hero-text .eyebrow{
     color:var(--cyan-glow);
@@ -132,10 +133,10 @@
     margin-top:22px;
     display:inline-flex;align-items:center;gap:10px;
     font-size:13px;color:var(--text-muted);
-    border:1px solid var(--line);
-    padding:8px 16px;border-radius:6px;
   }
-  .hero-role span.dot{width:8px;height:8px;background:var(--cyan-glow);display:inline-block;border-radius:2px;}
+  .hero-role span.chk{
+    width:12px;height:12px;border:1px solid var(--text-muted);display:inline-block;
+  }
   .hero-menu{
     margin-top:34px;display:flex;flex-direction:column;gap:14px;
   }
@@ -210,24 +211,23 @@
     border:1px solid var(--line);padding:4px 10px;border-radius:5px;color:var(--text-muted);
   }
   .proj-grid{
-    columns:4 220px;
-    column-gap:10px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-auto-rows:150px;
+    gap:10px;
   }
   .proj-item{
     position:relative;border-radius:8px;overflow:hidden;
     background:#111c2c;border:1px solid var(--line);
-    break-inside:avoid;
-    margin-bottom:10px;
-    display:inline-block;
-    width:100%;
   }
-  .proj-item img{width:100%;height:auto;display:block;transition:transform .4s;}
-  .proj-item:hover img{transform:scale(1.03);}
+  .proj-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+  .proj-item:hover img{transform:scale(1.06);}
   .proj-item .label{
     position:absolute;bottom:0;left:0;right:0;
     padding:8px 10px;font-size:11px;color:var(--text-muted);
     background:linear-gradient(0deg,rgba(0,0,0,.75),transparent);
   }
+  .proj-item.big{grid-column:span 2;grid-row:span 2;}
 
   /* ---------- CONTACT ---------- */
   #contact{
@@ -267,7 +267,8 @@
     .profile-grid{grid-template-columns:1fr;}
     .two-col{grid-template-columns:1fr;}
     .contact-grid{grid-template-columns:1fr;}
-    .proj-grid{columns:2 140px;}
+    .proj-grid{grid-template-columns:repeat(2,1fr);}
+    .proj-item.big{grid-column:span 2;}
     .thankyou h2{text-align:left;}
     .navpill a{padding:8px 12px;font-size:10px;}
   }
@@ -288,13 +289,12 @@
 <section id="hero">
   <div class="hero-inner">
     <div class="hero-photo">
-      <div class="glow"></div>
+      <div class="redblob"></div>
       <img id="hero-photo" src="" alt="Hafidh Sabryan Alfatih">
     </div>
     <div class="hero-text">
-      <div class="eyebrow hud">Welcome</div>
       <h1 class="display">Portfolio<span class="hero-year"> 2025</span></h1>
-      <div class="hero-role hud"><span class="dot"></span> <span id="hero-title">Content Creator</span></div>
+      <div class="hero-role hud"><span class="chk"></span> <span id="hero-title">Content Creator</span></div>
       <div class="hero-menu hud">
         <a href="#profile">Start</a>
         <a href="#projects">Options</a>
@@ -474,9 +474,9 @@ function render(data){
 
   const grid = document.getElementById('proj-grid');
   grid.innerHTML='';
-  (data.projects||[]).forEach(p=>{
+  (data.projects||[]).forEach((p,i)=>{
     const el = document.createElement('div');
-    el.className = 'proj-item';
+    el.className = 'proj-item' + (p.big ? ' big' : '');
     el.innerHTML = `<img src="${p.imageUrl}" alt="${p.title}"><div class="label">${p.title}</div>`;
     grid.appendChild(el);
   });
