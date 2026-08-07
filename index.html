@@ -72,6 +72,10 @@
     0%,100%{transform:translateX(-50%) rotate(-4deg);}
     50%{transform:translateX(-50%) rotate(4deg);}
   }
+  @keyframes swingPinCorner{
+    0%,100%{transform:rotate(-4deg);}
+    50%{transform:rotate(4deg);}
+  }
   @keyframes bgDrift{
     0%{background-position:0 0;}
     100%{background-position:48px 48px;}
@@ -256,6 +260,8 @@
   @media(max-width:800px){
     .row, .row.bottom-row{grid-template-columns:1fr;}
     .board{padding:34px 20px;}
+    .clip-pin{left:auto;right:14px;top:-20px;animation:swingPinCorner 4.5s ease-in-out infinite;}
+    .clip-pin::after{left:auto;right:15px;transform:none;}
   }
 </style>
 </head>
