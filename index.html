@@ -46,7 +46,7 @@
   }
   .hero-blue-title h1{
     font-family:'Night House','Space Grotesk',sans-serif;font-weight:800;
-    font-size:clamp(32px,9.5vw,120px);
+    font-size:clamp(46px,13vw,120px);
     line-height:0.86;color:#0a2470;letter-spacing:1px;
     white-space:nowrap;
     animation:glowPulse 3.5s ease-in-out infinite;
@@ -112,6 +112,7 @@
   .paper-nav a:nth-child(3){transform:rotate(-1deg);}
   .paper-nav a:nth-child(4){transform:rotate(2deg);}
   .paper-nav a:hover{transform:translateY(-4px) rotate(0deg);box-shadow:0 14px 24px rgba(0,0,0,.3);}
+  .paper-nav a.pressed{transform:scale(0.88) translateY(2px) rotate(0deg) !important;box-shadow:0 4px 8px rgba(0,0,0,.25) !important;transition:transform .15s ease, box-shadow .15s ease;}
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease, transform .8s ease;}
   .reveal-left{opacity:0;transform:translateX(-60px);transition:opacity .8s ease, transform .8s ease;}
   .reveal-right{opacity:0;transform:translateX(60px);transition:opacity .8s ease, transform .8s ease;}
@@ -277,7 +278,7 @@
 
   .sticker-boo{width:105px;animation:floatY 3.4s ease-in-out infinite;}
   .sticker-sleepy{width:98px;animation:wobble 4.2s ease-in-out infinite;}
-  .sticker-blush{width:100px;animation:floatY 3.8s ease-in-out infinite reverse;}
+  .sticker-blush{width:85px;bottom:-12px;left:-32px;animation:floatY 3.8s ease-in-out infinite reverse;}
   .sticker-heart{width:96px;animation:stickerPulse 2.6s ease-in-out infinite;}
   .sticker-headset{width:85px;animation:wobble 4.6s ease-in-out infinite;}
   .sticker-icecream{width:82px;animation:floatY 3.2s ease-in-out infinite;}
@@ -285,7 +286,7 @@
   @media(max-width:800px){
     .sticker-boo{width:78px;}
     .sticker-sleepy{width:80px;}
-    .sticker-blush{width:84px;}
+    .sticker-blush{width:56px;bottom:-8px;left:-20px;}
     .sticker-heart{width:80px;}
     .sticker-headset{width:62px;}
     .sticker-icecream{width:55px;}
@@ -521,6 +522,35 @@ const revealObserver = new IntersectionObserver((entries)=>{
   });
 },{threshold:0.2});
 revealEls.forEach(el=>revealObserver.observe(el));
+
+/* nav buttons: press effect + smooth sliding scroll to target section */
+function smoothScrollTo(target, duration){
+  const startY = window.pageYOffset;
+  const targetY = target.getBoundingClientRect().top + startY - 16;
+  const diff = targetY - startY;
+  let startTime = null;
+  function easeInOutCubic(t){
+    return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+  }
+  function step(timestamp){
+    if(!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, startY + diff * easeInOutCubic(progress));
+    if(progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+document.querySelectorAll('.paper-nav a').forEach(link=>{
+  link.addEventListener('click', function(e){
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    this.classList.add('pressed');
+    setTimeout(()=>this.classList.remove('pressed'), 180);
+    if(target) smoothScrollTo(target, 750);
+  });
+});
 </script>
 </body>
 </html>
